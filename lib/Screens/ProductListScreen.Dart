@@ -103,7 +103,7 @@ void navigateToEditScreen(Product product) async {
       builder: (context) => ProductEditScreen(product: product),
     ),
   ).then((_) {
-    fetchProducts(); // Refresh the product list after editing
+    fetchProducts(); 
   });
 }
 
@@ -113,7 +113,7 @@ void navigateToEditScreen(Product product) async {
       fetchProducts();
     } catch (e) {
       print('Error: $e');
-      // Add an empty body here:
+      
     }
   }
 
