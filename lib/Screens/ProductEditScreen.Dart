@@ -50,15 +50,19 @@ Future<void> updateProduct() async {
   }
 }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        _imageFile = pickedImage;
-      });
-    }
+Future<void> _pickImage() async {
+  final picker = ImagePicker();
+  final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  if (pickedImage != null) {
+    setState(() {
+      _imageFile = pickedImage;
+    });
+
+    
+    String fileName = pickedImage.path.split('/').last;
+    print('File Name: $fileName');
   }
+}
 
   @override
   Widget build(BuildContext context) {

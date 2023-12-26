@@ -3,6 +3,7 @@ import '../Services/networkservice.dart' as networkService;
 import '../Screens/ProductAddScreen.Dart';
 import '../Screens/ProductEditScreen.Dart';
 import '../Models/Product.dart';
+import '../Screens/ProductDetailScreen.Dart';
 
 class ProductListScreen extends StatefulWidget {
   @override
@@ -48,15 +49,19 @@ class _ProductListScreenState extends State<ProductListScreen> {
             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             elevation: 4.0,
             child: ListTile(
-              leading: Image.network(
-                products[index].image,
+              leading: SizedBox(
                 width: 50,
                 height: 50,
-                fit: BoxFit.cover,
+                child: Image.network(
+                  'http://localhost:9090/public/images/produit/${products[index].image}',
+                  fit: BoxFit.cover,
+                ),
               ),
               title: Text(products[index].name),
-              subtitle:
-                  Text('Price: ${products[index].price.toStringAsFixed(2)}'),
+              subtitle: Text('Price: \$${products[index].price.toStringAsFixed(2)}'),
+              onTap: () {
+                navigateToProductDetailScreen(products[index]);
+              },
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -64,7 +69,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     icon: Icon(Icons.edit),
                     onPressed: () {
                       navigateToEditScreen(products[index]);
-                      print(products[index]);
                     },
                   ),
                   IconButton(
@@ -88,6 +92,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
+  void navigateToProductDetailScreen(Product product) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductDetailScreen(product: product),
+      ),
+    );
+  }
+
   void navigateToAddScreen() async {
     await Navigator.push(
       context,
@@ -96,16 +109,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
     fetchProducts();
   }
 
-void navigateToEditScreen(Product product) async {
-  await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ProductEditScreen(product: product),
-    ),
-  ).then((_) {
-    fetchProducts(); 
-  });
-}
+  void navigateToEditScreen(Product product) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductEditScreen(product: product),
+      ),
+    ).then((_) {
+      fetchProducts();
+    });
+  }
 
   Future<void> deleteProduct(String productId) async {
     try {
@@ -113,8 +126,6 @@ void navigateToEditScreen(Product product) async {
       fetchProducts();
     } catch (e) {
       print('Error: $e');
-      
     }
   }
-
 }
